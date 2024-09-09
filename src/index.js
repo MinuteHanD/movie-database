@@ -33,12 +33,34 @@ app.post("/signup", async (req, res) => {
         res.send("User already exists. please choose adifferent Username");
     }
     else{
+        const saltRounds = 10;
+        const hashedPassword = await bcrypt.hash(data.password, saltRounds);
+        data.password = hashedPassword;
         const userdata = await collection.insertMany(data);
         console.log(userdata);
     }
 
     
-})
+});
+
+app.post("/login", async(req, res) => {
+    try{
+        const check = await collection.findOne({name: req.body.username});
+        if(!check){
+            res.send("user name cannot found");
+        }
+
+        const isPasswordMatch = await bcrypt.compare(req.body.password, check.password);
+        if(isPasswordMatch){
+            res.render("home");
+        }
+        else{
+            req.send("wrong password");
+        }
+    }catch{
+        res.send("wrong Details");
+    }
+});
 
 const port = 5000;
 app.listen(port, () => {
