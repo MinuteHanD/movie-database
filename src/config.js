@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
-const connect = mongoose.connect("mongodb://localhost:27017/Login-Signup");
+const connectionString = "mongodb+srv://darbariamritanshu:eAGSTpVZ2zCph0rr@cluster0.pn30z.mongodb.net/basicdata?retryWrites=true&w=majority";
+
+const connect = mongoose.connect(connectionString);
 
 connect.then(() => {
     console.log("database connected successfully");
